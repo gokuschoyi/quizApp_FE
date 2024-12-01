@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../api'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../Components/auth/authSlice'
+import BGNew from '../assets/bgNew.jpg'
 
 const Auth = () => {
     const dispatch = useDispatch()
@@ -79,9 +80,13 @@ const Auth = () => {
 
 
     return (
-        <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"} height={"100%"} gap={2}>
+        <Box
+            style={{ backgroundImage: `url(${BGNew})`, backgroundSize: 'cover' }}
+            display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"} height={"96vh"} gap={2}
+            padding={2} borderRadius={2}
+        >
             {error && <Alert severity="error">{error}</Alert>}
-            <Box display={"flex"} flexDirection={"column"} gap={2}>
+            <Box display={"flex"} flexDirection={"column"} gap={2} bgcolor={"#ffffff"} p={2} borderRadius={5} border={"1px solid black"}>
                 <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={2}>
                     <Typography variant={"h3"}>Login</Typography>
                     {loading && <CircularProgress size={30} />}
@@ -108,9 +113,9 @@ const Auth = () => {
                         id="user_password" label="Password" variant="outlined" />
                 </Box>
                 <Button variant={"contained"} onClick={handleSubmit}>Login</Button>
-            </Box>
-            <Box>
-                <Typography variant={"body2"}>Don't have an account? <Button onClick={() => navigate('/register')}>Register</Button></Typography>
+                <Box>
+                    <Typography variant={"body2"}>Don't have an account? <Button sx={{ color: 'black', textDecoration: 'underline' }} onClick={() => navigate('/register')}>Register</Button></Typography>
+                </Box>
             </Box>
         </Box>
     )

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Box, Button, TextField, Typography, CircularProgress, Alert } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { register } from '../api'
+import BGNew from '../assets/bgNew.jpg'
 
 interface RegisterField {
     value: string;
@@ -84,7 +85,7 @@ const Register = () => {
 
 
     const handleRegister = () => {
-        console.log("Register")
+        // console.log("Register")
         setError("")
 
         const registrationData = registerData
@@ -110,7 +111,7 @@ const Register = () => {
             last_name: registrationData.last_name.value,
             password: registrationData.password.value
         }
-        console.log(registration_payload)
+        // console.log(registration_payload)
 
         setLoading(true)
         register(registration_payload.email, registration_payload.first_name, registration_payload.last_name, registration_payload.password)
@@ -130,7 +131,9 @@ const Register = () => {
 
 
     return (
-        <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"} height={"100%"} gap={2}>
+        <Box
+            style={{ backgroundImage: `url(${BGNew})`, backgroundSize: 'cover' }}
+            display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"center"} height={"100%"} gap={2}>
             {error && <Alert severity="error">{
                 Object.keys(error).map((key) => {
                     return (
@@ -138,7 +141,7 @@ const Register = () => {
                     )
                 })
             }</Alert>}
-            <Box display={"flex"} flexDirection={"column"} gap={2}>
+            <Box display={"flex"} flexDirection={"column"} gap={2} bgcolor={"#ffffff"} p={2} borderRadius={5} border={"1px solid black"}>
                 <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={2}>
                     <Typography variant={"h3"}>Register</Typography>
                     {loading && <CircularProgress size={30} />}
@@ -191,9 +194,9 @@ const Register = () => {
                         id="re_password" label="Re-enter Password" variant="outlined" />
                 </Box>
                 <Button variant={"contained"} onClick={handleRegister} disabled={registerDisabled}>Register</Button>
-            </Box>
-            <Box>
-                <Typography variant={"body2"}>Already have an account? <Button onClick={() => navigate('/')}>Login</Button></Typography>
+                <Box>
+                    <Typography variant={"body2"}>Already have an account? <Button onClick={() => navigate('/')}>Login</Button></Typography>
+                </Box>
             </Box>
         </Box>
     )

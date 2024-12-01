@@ -1,6 +1,3 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
@@ -37,10 +34,35 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Project Features
+
+- **User Authentication**: Users can register and login.
+- **Protected Routes**: Certain routes are protected and require authentication.
+- **Quizzes**: Users can view lessons, take quizzes, and view their scores.
+- **State Management**: The application state is managed using Redux and persisted using redux-persist.
+
+## File Descriptions
+
+- `src/api.tsx`: Contains API calls for login, registration, fetching lessons, quizzes, and evaluating quizzes.
+- `src/Components/auth/protectedRoute.tsx`: A component that protects routes from unauthorized access.
+- `src/Components/quiz/lessons.tsx`: Displays the list of lessons.
+- `src/Components/quiz/quizQuestion.tsx`: Displays quiz questions and handles quiz submission.
+- `src/Components/quiz/quizSlice.tsx`: Redux slice for managing quiz-related state.
+- `src/Components/quiz/quizzes.tsx`: Displays the list of quizzes for a lesson.
+- `src/Pages/auth.tsx`: Login page.
+- `src/Pages/dashboard.tsx`: Dashboard page.
+- `src/Pages/register.tsx`: Registration page.
+- `src/store.tsx`: Configures the Redux store and sets up state persistence.
+
+## Backend URL
+
+The backend URL is configured in `src/constants.tsx`:
+
+```ts
+export const BackendUrl = 'https://4a92-149-167-138-210.ngrok-free.app';

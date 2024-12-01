@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import CloseIcon from '@mui/icons-material/Close';
 import { getQuizQuestions } from '../../api'
-import { Box, Typography, Divider, Button, Alert, IconButton, Skeleton } from '@mui/material'
+import { Box, Typography, Divider, Button, Skeleton, Card, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'
 import { useSelector } from 'react-redux';
 import { evaluateQuiz } from '../../api'
 
@@ -37,9 +36,7 @@ const QuizQuestion = () => {
         }
     }, [quiz_id])
 
-    const handleSelection = (question_id: string, choice_id: string, answer: string, question_type: string) => {
-        // console.log('Option clicked', question_id, choice_id, answer, question_type)
-
+    const handleSelection = (question_id: string, choice_id: string) => {
         let updatedQuestions = questions.map((question: any) => {
             if (question.id === question_id) {
                 let updatedChoices = question.choices.map((choice: any) => {
@@ -69,7 +66,7 @@ const QuizQuestion = () => {
     }
 
     const handleSubmit = () => {
-        console.log('Submit clicked')
+        // console.log('Submit clicked')
         let hasEmptyAnswers = false;
         const answers: { question_id: string; selected_answers: string[] }[] = []
         questions.forEach((question: any) => {
@@ -85,39 +82,36 @@ const QuizQuestion = () => {
         })
 
         if (hasEmptyAnswers) {
-            console.log("Please answer all questions");
+            // console.log("Please answer all questions");
             setSubmissionError(true);
             return;
         }
 
         setSubmissionError(false);
-        console.log(answers)
+        // console.log(answers)
         if (quiz_id) {
             evaluateQuiz(user_id, quiz_id, answers)
                 .then((res) => {
-                    console.log(res)
+                    // console.log(res)
                     setResults({ score: res.data.score, total_questions: res.data.total_questions, evaluated: res.data.evaluated })
                 })
                 .catch((err) => {
                     console.log(err)
                 })
         } else {
-            console.error("Quiz ID is undefined");
+            // console.error("Quiz ID is undefined");
         }
+    }
+
+    const handleClose = () => {
+        setSubmissionError(false);
     }
 
     return (
         <Box display={"flex"} flexDirection={"column"} alignItems={'flex-start'}>
-            <Typography variant='h4'>Questions</Typography>
-            <Box pt={1}>
-                {submissionError &&
-                    <Box display={"flex"} flexDirection={"row"}>
-                        <Alert severity="error">Please answer all questions</Alert>
-                        <IconButton onClick={() => setSubmissionError(false)}>
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-                }
+            <Box display={"flex"} flexDirection={"row"} width={"100%"} justifyContent={"space-between"}>
+                <Typography variant='h4'>Questions</Typography>
+                <Button sx={{ backgroundColor: "black" }} size={"small"} variant='contained' onClick={() => navigate(-1)}>Back to Quizzes</Button>
             </Box>
 
             {!results.evaluated
@@ -128,13 +122,13 @@ const QuizQuestion = () => {
                             ?
                             <Skeleton variant="rectangular" width={"100%"} height={100} />
                             :
-                            <Box>
-                                <Box pt={2} display={"flex"} justifyContent={"flex-end"} width={"100%"}>
+                            <Box display={"flex"} flexDirection={"column"} gap={1}>
+                                {/* <Box pt={2} display={"flex"} justifyContent={"flex-end"} width={"100%"}>
                                     <Button sx={{ backgroundColor: "black" }} variant='contained' onClick={handleSubmit}>Submit</Button>
-                                </Box>
+                                </Box> */}
                                 {questions.map((question: any, i: number) => {
                                     return (
-                                        <Box key={question.id} borderRadius={2} width={"100%"} pt={1} pb={1}  >
+                                        <Card key={question.id} sx={{ padding: '8px 8px 8px 8px', backgroundColor: '#ebebeb' }}>
                                             <Box display={"flex"} bgcolor={"#ffe4c4"} p={1} borderRadius={2} justifyContent={"space-between"}>
                                                 <Typography variant='body1' fontWeight={"bold"}>{i + 1} : {question.text}</Typography>
                                                 <Typography variant='body1' fontWeight={"bold"}>{question.question_type === "single" ? "Single Response" : "Multiple Response"}</Typography>
@@ -151,10 +145,10 @@ const QuizQuestion = () => {
                                                             justifyContent={"start"}
                                                             p={1}
                                                             borderRadius={2}
-                                                            bgcolor={answer.selected ? "#deb887" : "#f0f8ff"}
+                                                            bgcolor={answer.selected ? "#deb887" : "#b3b3b3"}
                                                             width={answer.selected ? "95%" : "100%"}
                                                             mt={1}
-                                                            onClick={(e) => handleSelection(question.id, answer.id, answer.text, question.question_type)}
+                                                            onClick={(e) => handleSelection(question.id, answer.id)}
                                                         >
                                                             <Typography variant='body1'>{answer.text}</Typography>
                                                         </Box>
@@ -164,7 +158,7 @@ const QuizQuestion = () => {
                                             <Box pt={1} >
                                                 <Divider style={{ borderColor: "ffffff" }} />
                                             </Box>
-                                        </Box>
+                                        </Card>
                                     )
                                 })}
                                 <Box pt={2} display={"flex"} justifyContent={"flex-end"} width={"100%"}>
@@ -182,6 +176,25 @@ const QuizQuestion = () => {
                     <Button sx={{ backgroundColor: "black" }} variant='contained' onClick={() => navigate(-1)}>Back to Quizzes</Button>
                 </Box>
             }
+
+            <Dialog
+                open={submissionError}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Submission Error
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Please select an answer for all questions
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Close</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
